@@ -308,17 +308,12 @@ $user_data = check_login($con);
 		</div>	
 	</div>
 </div>
-<div class="content full-width clearfix">
+<div class="contentb full-width clearfix">
 	<div class="fixed-width">
-		<h2><b>請選擇以下兩種行程</b></h2>
-		<p>選擇完請提交並送出</p>
-		<div class="item">
-			<form action="choice.php" method="post">
-				<label for="choice"><h2>海島漫步</h2></label><br>
-				<input type="radio" id="A" name="choice" value="A"><label for="A"><h4>海島漫步</h4></label><br>
-				<input type="radio" id="B" name="choice" value="B"><label for="B"><h4>城街走訪</h4></label><br>
-				<input type="submit" name= "insert" >
-			</form>
+		<h2><b>此次旅遊包含以上兩種行程</b></h2>
+		<p>請按下一頁跳至行程確認畫面</p>
+			<form action="order.php" method="post">
+				<input type="submit" value="下一頁">
 		</div>
 	</div>
 </div>
@@ -330,8 +325,8 @@ $user_data = check_login($con);
 			<ul>
 				<li><a href="#">關於我們</a></li>
 				<li><a href="#">最新資訊</a></li>
-				<li><a href="sign_up.html">馬上註冊</a></li>
-				<li><a href="login.html">馬上登入</a></li>
+				<li><a href="sign_up.php">馬上註冊</a></li>
+				<li><a href="login.php">馬上登入</a></li>
 			</ul>
 		</div>
 		<div>

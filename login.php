@@ -1,9 +1,59 @@
+<?php
+session_start();
+
+include("connect.php");
+include("function.php");
+
+if($_SERVER['REQUEST_METHOD'] == "POST")
+{
+	//something was posted
+	$user_name = $_POST['email'];
+	$password = $_POST['password'];
+
+	if(!empty($user_name) && !empty($password) )
+	{
+			//read from database
+			
+			$query = "select * from users where user_name = '$user_name' limit 1";
+
+			$result = mysqli_query($con, $query);
+			
+			if($result)
+			{
+				if($result && mysqli_num_rows($result) > 0)
+				{
+					$user_data = mysqli_fetch_assoc($result);
+					
+					if($user_data['password'] == $password && $user_data['type'] == "0")
+					{
+						$_SESSION['user_id'] = $user_data['user_id'];
+						header("Location: MAINPG.php");
+						die;
+					}elseif($user_data['password'] == $password && $user_data['type'] == "1"){
+						$_SESSION['user_id'] = $user_data['user_id'];
+						header("Location: admin.php");
+						die;
+					}else{
+						echo "Wrong username or password!";
+					}
+				}
+			}
+			echo "Wrong username or password!";
+	}else
+	{
+		echo "Please enter valid information";
+	}
+}
+
+
+?>
+
 <html>
 <head>
-<title>admin</title>
+<title>LOGIN</title>
 
 <link href="css/global.css" rel="stylesheet">
-<link href="css/admin.css" rel="stylesheet" media="screen and (min-width: 1000px)">
+<link href="css/login.css" rel="stylesheet" media="screen and (min-width: 1000px)">
 <link href="css/phone.css" rel="stylesheet" media="screen and (max-width: 999.9px)">
 <link href="fontawesome/css/all.css" rel="stylesheet">
 <link href="bxslider/jquery.bxslider.css" rel="stylesheet">
@@ -37,15 +87,6 @@
 			return false;
 		});
 	});
-    $(function(){
-    function receiveMessageFromIframePage (event) {
-        var height = ('receiveMessageFromIframePage',event.data.h);
-        console.log(height);//接收source.html頁面所回傳的高度值
-        $('#myIframe').height(height);//將取得的高度，變更myIframe高度
-
-    }
-    window.addEventListener("message", receiveMessageFromIframePage, false);//監聽receiveMessageFromIframePage
-});
 </script>
 
 </head>
@@ -53,7 +94,7 @@
 <div class="header full-width clearfix">
 	<div class="fixed-width">
 		<div class="logo">
-			歡迎<span>ADMIN</span>
+			雅加達<span>醬油旅遊</span>
 		</div>
 		<div class="menu">
 			<a href="#">Menu<i class="fas fa-bars"></i></a>
@@ -63,38 +104,63 @@
 <div class="navigator">
 	<p><a href="#"><i class="fas fa-times"></i></a></p>
 	<ul>
-		<li><a href="index.php">首頁</a></li>
+		<li><a href="index.php">主頁</a></li>
 		<li><a href="index.php">關於我們</a></li>
 		<li><a href="index.php">最新資訊</a></li>
 	</ul>
 	<div>
-		<a href="index.php">登出</a>
+		<a href="sign_up.php">註冊</a>
+		<a href="login.php">登入</a>
 	</div>
 </div>
 <div class="banner full-width clearfix">
 	<div class="fixed-width">
 		<div class="slider">
-			<ul>
-				<li><img src="images/banner_2.jpg"></li>
-				<li><img src="images/gema-saputera-moDWHKqggFc-unsplash.jpg"></li>
-				<li><img src="images/eugenia-clara-rF7wHTvZbwo-unsplash.jpg"></li>
-			</ul>	
+			<div class="form">
+				<form action="" method="post">
+				<label for="account">帳號</label><br>
+				<input type="text" id="account" name="email" placeholder="請輸入您的email或電話號碼">
+				<br>
+				<label for="password">密碼</label><br>
+				<input type="password" id="password" name="password" placeholder="請輸入您的密碼">
+				<br>
+				<input type="submit" name="login" value="確認送出">
+				<a href="sign_up.php">加入我們</a>
+				<hr>
+				</form>
+			
+			<div class="ps">
+				<a href="">忘記密碼</a>
+			</div>    
+		</div>
 		</div>
 		<div class="main">
 			<div>
-				<h2>歡迎<h2><span>ADMIN</span></h2>
+				<h2>醬油旅遊</h2>
+                <p>
+                在家很無聊？<br>讓我們<br>帶您找回最舒適的一天
+                </p>
 			</div>
-			<div class="d">
-				<h2>訂單及顧客查詢</h2>
-				<P>資料會直接顯示顧客及訂單資訊</P>
-                <form action="check2.php" method="post">
-                    <input type="submit" value="查詢">
-                </form>
+			<div>
+				<h2>醬油旅遊</h2>
+                <p>
+                在家很無聊？<br>讓我們<br>帶您找回最舒適的一天
+                </p>
 			</div>
+            
 		</div>
 	</div>	
 </div>
 
+<div class="notified full-width">
+	<div class="fixed-width">
+		<h2>了解更多？</h2>
+		<p>與醬油一起探索世界大小事</p>
+		<form>
+			<input name="email" type="email" placeholder="Email address"><button>Sign Up</button>
+		</form>
+	</div>
+</div>
 <div class="map full-width clearfix">
 	<div class="fixed-width">
 		<div>
@@ -102,7 +168,7 @@
 			<ul>
 				<li><a href="index.php">關於我們</a></li>
 				<li><a href="index.php">最新資訊</a></li>
-				<li><a href="sign_up.html">馬上註冊</a></li>
+				<li><a href="sign_up.php">馬上註冊</a></li>
 				<li><a href="login.php">馬上登入</a></li>
 			</ul>
 		</div>

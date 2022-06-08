@@ -1,9 +1,9 @@
 <html>
 <head>
-<title>admin</title>
+<title>MAINPY</title>
 
 <link href="css/global.css" rel="stylesheet">
-<link href="css/admin.css" rel="stylesheet" media="screen and (min-width: 1000px)">
+<link href="css/order.css" rel="stylesheet" media="screen and (min-width: 1000px)">
 <link href="css/phone.css" rel="stylesheet" media="screen and (max-width: 999.9px)">
 <link href="fontawesome/css/all.css" rel="stylesheet">
 <link href="bxslider/jquery.bxslider.css" rel="stylesheet">
@@ -37,15 +37,6 @@
 			return false;
 		});
 	});
-    $(function(){
-    function receiveMessageFromIframePage (event) {
-        var height = ('receiveMessageFromIframePage',event.data.h);
-        console.log(height);//接收source.html頁面所回傳的高度值
-        $('#myIframe').height(height);//將取得的高度，變更myIframe高度
-
-    }
-    window.addEventListener("message", receiveMessageFromIframePage, false);//監聽receiveMessageFromIframePage
-});
 </script>
 
 </head>
@@ -53,7 +44,7 @@
 <div class="header full-width clearfix">
 	<div class="fixed-width">
 		<div class="logo">
-			歡迎<span>ADMIN</span>
+			雅加達<span>醬油旅遊</span>
 		</div>
 		<div class="menu">
 			<a href="#">Menu<i class="fas fa-bars"></i></a>
@@ -63,11 +54,11 @@
 <div class="navigator">
 	<p><a href="#"><i class="fas fa-times"></i></a></p>
 	<ul>
-		<li><a href="index.php">首頁</a></li>
-		<li><a href="index.php">關於我們</a></li>
-		<li><a href="index.php">最新資訊</a></li>
+		<li><a href="#">海島漫步</a></li>
+		<li><a href="#">城街走訪</a></li>
 	</ul>
 	<div>
+        <a href="edit.php">編輯會員資料</a>
 		<a href="index.php">登出</a>
 	</div>
 </div>
@@ -82,17 +73,42 @@
 		</div>
 		<div class="main">
 			<div>
-				<h2>歡迎<h2><span>ADMIN</span></h2>
+				<h2>海島漫步</h2>
+				<p>行程A主打清新放鬆的慢旅遊，行程會帶大家體驗印尼海島風情等雅加達近郊景點...</p>
+				<a href="#">A</a>
 			</div>
-			<div class="d">
-				<h2>訂單及顧客查詢</h2>
-				<P>資料會直接顯示顧客及訂單資訊</P>
-                <form action="check2.php" method="post">
-                    <input type="submit" value="查詢">
-                </form>
+			<div>
+				<h2>城街走訪</h2>
+				<p>行程B主打雅加達市區，城市旅遊的逛街、夜生活，行程除了帶大家探索印尼大城市的繁華...</p>
+				<a href="#">B</a>
 			</div>
 		</div>
-	</div>	
+	</div>
+</div>
+<div class="icon full-width clearfix">
+	<div class="fixed-width">
+		<h2><b>選擇您的行程</b></h2>
+		<p>請填上您的姓名和行程並提交</p>
+		<div class="item">
+			<div>
+				<div class="form">
+                    <form action="" method="post">
+                    <label for="name">姓名：</label><br>
+                    <input type="text" id="name" name="name" placeholder="請輸入您的姓名">
+                    <br>
+                    <label for="type">行程：</label>
+                    <input type="radio" id="type1" name="type" value="1"><label for="type1">海洋漫步</label>
+                    <input type="radio" id="type2" name="type" value="2"><label for="type2">城街走訪</label>
+                    <br>
+                    <input type="submit" name="insert" value="確認送出">
+                    </form>
+                </div>
+                <div class="ps">
+                    <a href="MAINPG.php">上一頁</a>
+                </div>  
+			</div>
+		</div>
+	</div>
 </div>
 
 <div class="map full-width clearfix">
@@ -100,19 +116,19 @@
 		<div>
 			<h4>關於醬油</h4>
 			<ul>
-				<li><a href="index.php">關於我們</a></li>
-				<li><a href="index.php">最新資訊</a></li>
-				<li><a href="sign_up.html">馬上註冊</a></li>
+				<li><a href="#">關於我們</a></li>
+				<li><a href="#">最新資訊</a></li>
+				<li><a href="sign_up.php">馬上註冊</a></li>
 				<li><a href="login.php">馬上登入</a></li>
 			</ul>
 		</div>
 		<div>
 			<h4>醬油特色</h4>
 			<ul>
-				<li><a href="index.php">客製旅遊</a></li>
-				<li><a href="index.php">半自由行旅遊</a></li>
-				<li><a href="index.php">了解更多</a></li>
-				<li><a href="index.php">其他意見</a></li>
+				<li><a href="#">客製旅遊</a></li>
+				<li><a href="#">半自由行旅遊</a></li>
+				<li><a href="#">了解更多</a></li>
+				<li><a href="#">其他意見</a></li>
 			</ul>
 		</div>
 		<div>
@@ -150,6 +166,29 @@
 </body>
 </html>
 
+<?php
+$connection = mysqli_connect("localhost","root","");
+$db = mysqli_select_db($connection,'try');
+
+if(isset($_POST['insert']))
+{
+    $name=$_POST['name'];
+    $choice=$_POST['type'];
+
+    $query = "INSERT INTO `users` (`Name`,`Choice`) VALUES ('$name','$choice')";
+    $query_run = mysqli_query($connection,$query);
+
+    if($query_run)
+    {
+        $_SESSION['status'] = "inserted successfully";
+		header("Location: confirm_1.php");
+    }else
+    {
+        $_SESSION['status'] = "inserted successfully";
+		header("Location: confirm_1.php");
+    }
+}
+?>
 
 
 
